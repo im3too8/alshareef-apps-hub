@@ -4,12 +4,15 @@ import { Application } from '@/types';
 import { Card } from '@/components/ui/card';
 import { ExternalLink } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface ApplicationCardProps {
   application: Application;
 }
 
 const ApplicationCard: React.FC<ApplicationCardProps> = ({ application }) => {
+  const { t, language } = useLanguage();
+  
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -27,17 +30,17 @@ const ApplicationCard: React.FC<ApplicationCardProps> = ({ application }) => {
           />
         </div>
         
-        <div className="flex flex-col flex-grow p-4">
+        <div className={`flex flex-col flex-grow p-4 ${language === 'ar' ? 'text-right' : ''}`}>
           <h3 className="text-lg font-semibold mb-2 text-brand-dark">{application.name}</h3>
           <p className="text-sm text-brand-gray mb-4 flex-grow">{application.description}</p>
           <a 
             href={application.link} 
             target="_blank" 
             rel="noopener noreferrer"
-            className="inline-flex items-center text-sm font-medium text-brand-blue hover:underline"
+            className={`inline-flex items-center text-sm font-medium text-brand-blue hover:underline ${language === 'ar' ? 'flex-row-reverse' : ''}`}
           >
-            View Application
-            <ExternalLink className="ml-1 h-3 w-3" />
+            {t('app.view')}
+            <ExternalLink className={`${language === 'ar' ? 'mr-1' : 'ml-1'} h-3 w-3`} />
           </a>
         </div>
       </Card>

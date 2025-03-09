@@ -6,7 +6,6 @@ import {
   getApplicationById, 
   updateApplication 
 } from '@/services/applicationService';
-import { Application } from '@/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -16,6 +15,7 @@ import { toast } from '@/hooks/use-toast';
 import { ArrowLeft, Save } from 'lucide-react';
 import MainLayout from '@/components/layout/MainLayout';
 import { useAuth } from '@/contexts/AuthContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { motion } from 'framer-motion';
 import ImageUploader from '@/components/admin/ImageUploader';
 
@@ -24,6 +24,7 @@ const ApplicationForm: React.FC = () => {
   const isEditMode = !!id;
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { t, language } = useLanguage();
   
   const [formData, setFormData] = useState({
     name: '',
@@ -100,15 +101,6 @@ const ApplicationForm: React.FC = () => {
     }
   };
 
-  // Sample image URLs for quick selection
-  const sampleImages = [
-    'https://images.unsplash.com/photo-1649972904349-6e44c42644a7',
-    'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b',
-    'https://images.unsplash.com/photo-1518770660439-4636190af475',
-    'https://images.unsplash.com/photo-1461749280684-dccba630e2f6',
-    'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d'
-  ];
-
   return (
     <MainLayout>
       <div className="space-y-6 max-w-3xl mx-auto">
@@ -118,13 +110,13 @@ const ApplicationForm: React.FC = () => {
           transition={{ duration: 0.3 }}
           className="flex items-center justify-between"
         >
-          <div className="flex items-center gap-2">
+          <div className={`flex items-center gap-2 ${language === 'ar' ? 'flex-row-reverse' : ''}`}>
             <Button variant="outline" size="sm" onClick={() => navigate('/admin')}>
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              <ArrowLeft className={`h-4 w-4 ${language === 'ar' ? 'ml-2' : 'mr-2'}`} />
+              {t('app.form.back')}
             </Button>
             <h1 className="text-2xl font-bold">
-              {isEditMode ? 'Edit Application' : 'Add New Application'}
+              {isEditMode ? t('app.form.edit') : t('app.form.add')}
             </h1>
           </div>
         </motion.div>
@@ -138,32 +130,34 @@ const ApplicationForm: React.FC = () => {
             <CardContent className="pt-6">
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="space-y-2">
-                  <Label htmlFor="name">Name</Label>
+                  <Label htmlFor="name">{t('app.form.name')}</Label>
                   <Input
                     id="name"
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    placeholder="Application Name"
+                    placeholder={t('app.form.name')}
                     required
+                    dir={language === 'ar' ? 'rtl' : 'ltr'}
                   />
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="description">Description</Label>
+                  <Label htmlFor="description">{t('app.form.description')}</Label>
                   <Textarea
                     id="description"
                     name="description"
                     value={formData.description}
                     onChange={handleChange}
-                    placeholder="Brief description of the application"
+                    placeholder={t('app.form.description')}
                     rows={4}
                     required
+                    dir={language === 'ar' ? 'rtl' : 'ltr'}
                   />
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="link">Link</Label>
+                  <Label htmlFor="link">{t('app.form.link')}</Label>
                   <Input
                     id="link"
                     name="link"
@@ -178,13 +172,12 @@ const ApplicationForm: React.FC = () => {
                 <ImageUploader 
                   imageUrl={formData.imageUrl}
                   onChange={handleImageChange}
-                  sampleImages={sampleImages}
                 />
                 
-                <div className="flex justify-end">
+                <div className={`flex ${language === 'ar' ? 'justify-start' : 'justify-end'}`}>
                   <Button type="submit" disabled={isSubmitting}>
-                    <Save className="h-4 w-4 mr-2" />
-                    {isSubmitting ? 'Saving...' : 'Save Application'}
+                    <Save className={`h-4 w-4 ${language === 'ar' ? 'ml-2' : 'mr-2'}`} />
+                    {isSubmitting ? t('app.form.saving') : t('app.form.save')}
                   </Button>
                 </div>
               </form>

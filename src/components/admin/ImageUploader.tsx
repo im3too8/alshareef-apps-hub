@@ -1,22 +1,18 @@
 
 import React, { useState } from 'react';
-import { Upload, Image as ImageIcon, X } from 'lucide-react';
+import { Upload, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { FileUploadResult } from '@/types';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface ImageUploaderProps {
   imageUrl: string;
   onChange: (url: string) => void;
-  sampleImages?: string[];
 }
 
-const ImageUploader: React.FC<ImageUploaderProps> = ({ 
-  imageUrl, 
-  onChange,
-  sampleImages = []
-}) => {
+const ImageUploader: React.FC<ImageUploaderProps> = ({ imageUrl, onChange }) => {
   const [isUploading, setIsUploading] = useState(false);
+  const { t } = useLanguage();
   
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -42,7 +38,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
   return (
     <div className="space-y-4">
       <div className="flex flex-col space-y-2">
-        <Label htmlFor="image-upload">Image</Label>
+        <Label htmlFor="image-upload">{t('app.form.image')}</Label>
         
         <div className="flex items-center gap-2">
           <Button 
@@ -54,7 +50,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
             className="flex items-center gap-2"
           >
             <Upload className="h-4 w-4" />
-            {isUploading ? 'Uploading...' : 'Upload Image'}
+            {isUploading ? t('app.form.uploading') : t('app.form.upload')}
           </Button>
           
           {imageUrl && (
@@ -66,7 +62,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
               className="flex items-center gap-2 text-red-500 hover:text-red-600"
             >
               <X className="h-4 w-4" />
-              Clear Image
+              {t('app.form.clear')}
             </Button>
           )}
           
@@ -87,27 +83,6 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
             alt="Preview" 
             className="w-full h-full object-cover"
           />
-        </div>
-      )}
-      
-      {sampleImages.length > 0 && (
-        <div className="mt-4">
-          <Label>Sample Images</Label>
-          <div className="grid grid-cols-5 gap-2 mt-2">
-            {sampleImages.map((url, index) => (
-              <div 
-                key={index}
-                className={`relative rounded overflow-hidden aspect-video border cursor-pointer hover:opacity-90 transition-opacity ${imageUrl === url ? 'ring-2 ring-brand-blue' : ''}`}
-                onClick={() => onChange(url)}
-              >
-                <img 
-                  src={url} 
-                  alt={`Sample ${index + 1}`} 
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            ))}
-          </div>
         </div>
       )}
     </div>
