@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta http-equiv="refresh" content="0; url=./index.html">
+    <script>
+      // إعادة توجيه أي صفحة غير موجودة إلى index.html بدون refresh مستمر
+      var path = window.location.pathname.replace('/alshareef-apps-hub/', '');
+      window.location.replace('/alshareef-apps-hub/index.html?redirect=' + path);
+    </script>
   </head>
   <body>
   </body>
