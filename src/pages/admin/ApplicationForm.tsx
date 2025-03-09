@@ -13,10 +13,11 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
 import { toast } from '@/hooks/use-toast';
-import { ArrowLeft, Save, Image } from 'lucide-react';
+import { ArrowLeft, Save } from 'lucide-react';
 import MainLayout from '@/components/layout/MainLayout';
 import { useAuth } from '@/contexts/AuthContext';
 import { motion } from 'framer-motion';
+import ImageUploader from '@/components/admin/ImageUploader';
 
 const ApplicationForm: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -63,6 +64,10 @@ const ApplicationForm: React.FC = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleImageChange = (url: string) => {
+    setFormData(prev => ({ ...prev, imageUrl: url }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -170,46 +175,11 @@ const ApplicationForm: React.FC = () => {
                   />
                 </div>
                 
-                <div className="space-y-2">
-                  <Label htmlFor="imageUrl">Image URL</Label>
-                  <Input
-                    id="imageUrl"
-                    name="imageUrl"
-                    value={formData.imageUrl}
-                    onChange={handleChange}
-                    placeholder="https://example.com/image.jpg"
-                    required
-                  />
-                  
-                  {formData.imageUrl && (
-                    <div className="mt-2 rounded-md overflow-hidden border aspect-video">
-                      <img 
-                        src={formData.imageUrl} 
-                        alt="Preview" 
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  )}
-                  
-                  <div className="mt-4">
-                    <Label>Sample Images</Label>
-                    <div className="grid grid-cols-5 gap-2 mt-2">
-                      {sampleImages.map((url, index) => (
-                        <div 
-                          key={index}
-                          className={`relative rounded overflow-hidden aspect-video border cursor-pointer hover:opacity-90 transition-opacity ${formData.imageUrl === url ? 'ring-2 ring-brand-blue' : ''}`}
-                          onClick={() => setFormData(prev => ({ ...prev, imageUrl: url }))}
-                        >
-                          <img 
-                            src={url} 
-                            alt={`Sample ${index + 1}`} 
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
+                <ImageUploader 
+                  imageUrl={formData.imageUrl}
+                  onChange={handleImageChange}
+                  sampleImages={sampleImages}
+                />
                 
                 <div className="flex justify-end">
                   <Button type="submit" disabled={isSubmitting}>

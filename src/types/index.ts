@@ -13,3 +13,9 @@ export interface User {
   email: string;
   isAdmin: boolean;
 }
+
+export interface FileUploadResult {
+  url: string;
+  name: string;
+  size: number;
+}
