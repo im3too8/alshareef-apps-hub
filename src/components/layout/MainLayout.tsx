@@ -5,6 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
 import { ExternalLink, Lock, LogOut, Globe } from 'lucide-react';
+import logo from '/public/alshareef-apps-logo.svg';
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -24,12 +25,9 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       <header className="glass sticky top-0 z-10 border-b">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center space-x-2">
-            <Link 
-              to="/" 
-              className="text-xl font-medium tracking-tight hover:text-brand-blue transition-colors"
-            >
-              {t('nav.home')}
-            </Link>
+<Link to="/">
+  <img src={logo} alt="شعاري الشخصي" width="120" />
+</Link>
           </div>
           
           <div className="flex items-center space-x-4">
